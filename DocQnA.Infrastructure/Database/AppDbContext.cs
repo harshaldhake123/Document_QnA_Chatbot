@@ -1,11 +1,13 @@
-using DocQnA.Api.Models;
+using DocQnA.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-namespace DocQnA.Api.Data
+namespace DocQnA.Infrastructure.Database
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : DbContext(options)
     {
         public DbSet<Chunk> Chunks => Set<Chunk>();
+        public DbSet<Document> Documents => Set<Document>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,7 +21,7 @@ namespace DocQnA.Api.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection"), 
+                configuration.GetConnectionString("DefaultConnection"),
                 o => o.UseVector());
         }
     }

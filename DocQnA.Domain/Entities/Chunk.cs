@@ -1,6 +1,6 @@
 ﻿using Pgvector;
 
-namespace DocQnA.Api.Models
+namespace DocQnA.Domain.Entities
 {
     public class Chunk
     {
@@ -8,5 +8,6 @@ namespace DocQnA.Api.Models
         public int ChunkIndex { get; set; }
         public string Text { get; set; } = string.Empty;
         public Vector? Embedding { get; set; }
+        public Guid DocumentId { get; set; }
     }
 }

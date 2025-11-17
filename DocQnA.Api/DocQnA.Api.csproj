@@ -8,20 +8,27 @@
     <UserSecretsId>30dba0ac-b7ba-442b-b8eb-7fa7edfa79e2</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <StartupObject>DocQnA.Api.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.22">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
-    <PackageReference Include="OpenAI" Version="2.7.0" />
-    <PackageReference Include="Pgvector" Version="0.3.2" />
-    <PackageReference Include="Pgvector.EntityFrameworkCore" Version="0.2.2" />
-    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Requests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DocQnA.Application\DocQnA.Application.csproj" />
+    <ProjectReference Include="..\DocQnA.Infrastructure\DocQnA.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

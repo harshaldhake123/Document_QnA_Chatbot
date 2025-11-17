@@ -1,32 +1,44 @@
-using DocQnA.Api.Data;
-using DocQnA.Api.Services;
-using Microsoft.EntityFrameworkCore;
+using DocQnA.Api.Application.RAG.DocQnA.Api.Infrastructure.Parsing;
+using DocQnA.Api.Infrastructure.OpenAI.DocQnA.Api.Infrastructure.OpenAI;
+using DocQnA.Api.Middleware;
+using DocQnA.Application.Interfaces;
+using DocQnA.Infrastructure.Database;
+using DocQnA.Infrastructure.Ingestion;
+using DocQnA.Infrastructure.OpenAI;
+using DocQnA.Infrastructure.Parsing;
+using DocQnA.Infrastructure.Storage;
+using FluentValidation;
 using OpenAI;
 
 namespace DocQnA.Api
 {
-    public class Program
+    public static class Program
     {
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // DB
             builder.Services.AddDbContext<AppDbContext>();
 
-            // OpenAI
             builder.Services.AddSingleton(new OpenAIClient(builder.Configuration["OpenAI:ApiKey"]!));
-
-            // Services
-            builder.Services.AddScoped<EmbeddingService>();
+            builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
+            builder.Services.AddScoped<IDocumentParser, PdfDocumentParser>();
+            builder.Services.AddSingleton<IFileStorageService, LocalFileStorageService>();
+            builder.Services.AddScoped<DocumentIngestionService>();
+            builder.Services.AddScoped<IParserSelector, ParserSelector>();
+            builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddExceptionHandler<AppExceptionMiddleware>();
+            builder.Services.AddProblemDetails();
+
+            builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            app.UseExceptionHandler();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
