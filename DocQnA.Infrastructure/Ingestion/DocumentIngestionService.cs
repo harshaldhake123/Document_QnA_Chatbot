@@ -15,26 +15,26 @@ namespace DocQnA.Infrastructure.Ingestion
         private const int MinimumInputDocumentTextLength = 200;
         private static readonly TimeSpan EmbeddingTimeout = TimeSpan.FromSeconds(15);
 
-        public async Task<Guid> IngestAsync(DocumentUpload upload)
+        public async Task<Guid> IngestAsync(DocumentUpload documentUpload)
         {
-            var fileKey = await storage.SaveAsync(upload.Stream, upload.FileName);
+            var fileKey = await storage.SaveAsync(documentUpload.Stream, documentUpload.FileName);
 
             var document = new Document
             {
-                FileName = upload.FileName,
+                FileName = documentUpload.FileName,
                 FileKey = fileKey,
-                Size = upload.Size,
+                Size = documentUpload.Size,
                 Status = DocumentStatus.Processing
             };
 
             db.Documents.Add(document);
             await db.SaveChangesAsync();
 
-            await using var tx = await db.Database.BeginTransactionAsync();
+            await using var transaction = await db.Database.BeginTransactionAsync();
 
             try
             {
-                var parser = parserSelector.Select(upload.FileName, upload.ContentType);
+                var parser = parserSelector.Select(documentUpload.FileName, documentUpload.ContentType);
 
                 await using var storedStream = await storage.OpenReadAsync(fileKey);
                 var text = await parser.ParseAsync(storedStream);
@@ -73,12 +73,12 @@ namespace DocQnA.Infrastructure.Ingestion
                 document.Status = DocumentStatus.Uploaded;
                 await db.SaveChangesAsync();
 
-                await tx.CommitAsync();
+                await transaction.CommitAsync();
                 return document.Id;
             }
             catch
             {
-                await tx.RollbackAsync();
+                await transaction.RollbackAsync();
 
                 document.Status = DocumentStatus.Failed;
                 await db.SaveChangesAsync();

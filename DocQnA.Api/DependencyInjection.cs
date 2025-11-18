@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DocQnA.Application;
+using DocQnA.Infrastructure;
 
-namespace DocQnA.Infrastructure
+namespace DocQnA.Api
 {
-    internal class DependencyInjection
+    public static class DependencyInjection
     {
+        public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddApplication();
+            services.AddInfrastructure(config);
+
+            return services;
+        }
     }
 }

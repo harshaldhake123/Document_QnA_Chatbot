@@ -1,4 +1,4 @@
-﻿using DocQnA.Api.Application.RAG.DocQnA.Api.Infrastructure.Parsing;
+﻿using DocQnA.Application.Interfaces;
 using UglyToad.PdfPig;
 
 namespace DocQnA.Infrastructure.Parsing

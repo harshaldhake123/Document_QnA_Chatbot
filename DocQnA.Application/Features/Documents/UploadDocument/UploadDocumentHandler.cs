@@ -1,7 +1,7 @@
 ﻿using DocQnA.Application.Interfaces;
 using DocQnA.Application.Services;
 
-namespace DocQnA.Api
+namespace DocQnA.Application.Features.Documents.UploadDocument
 {
     public class UploadDocumentHandler(IDocumentIngestionService ingestion)
     {

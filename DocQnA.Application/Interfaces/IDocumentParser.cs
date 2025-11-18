@@ -1,12 +1,9 @@
-﻿namespace DocQnA.Api.Application.RAG
+﻿namespace DocQnA.Application.Interfaces
 {
-    namespace DocQnA.Api.Infrastructure.Parsing
+    public interface IDocumentParser
     {
-        public interface IDocumentParser
-        {
-            bool CanParse(string fileName, string contentType);
+        bool CanParse(string fileName, string contentType);
 
-            Task<string> ParseAsync(Stream stream);
-        }
+        Task<string> ParseAsync(Stream stream);
     }
 }

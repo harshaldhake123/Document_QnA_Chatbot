@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Requests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DocQnA.Application\DocQnA.Application.csproj" />
     <ProjectReference Include="..\DocQnA.Infrastructure\DocQnA.Infrastructure.csproj" />
   </ItemGroup>

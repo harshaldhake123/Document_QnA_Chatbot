@@ -1,6 +1,5 @@
 ﻿namespace DocQnA.Application.Services
 {
-
     public static class Chunker
     {
         public static List<string> ChunkText(string text, int maxChars = 800)

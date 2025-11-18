@@ -1,6 +1,5 @@
-﻿using DocQnA.Application.Interfaces;
-using DocQnA.Application.Services;
-using FluentValidation;
+﻿using DocQnA.Api.Requests;
+using DocQnA.Application.Features.Documents.UploadDocument;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocQnA.Api.Controllers
@@ -29,10 +28,5 @@ namespace DocQnA.Api.Controllers
 
             return Ok(new { documentId = result });
         }
-    }
-
-    public class UploadDocumentRequest
-    {
-        public IFormFile? File { get; set; }
     }
 }

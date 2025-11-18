@@ -14,9 +14,4 @@ namespace DocQnA.Infrastructure.OpenAI
             return new Vector(result.Value.ToFloats());
         }
     }
-    public interface ILlmService
-    {
-        Task<string> AnswerAsync(string question, string context);
-    }
-
 }
