@@ -35,7 +35,7 @@ public static class DependencyInjection
         services.AddScoped<IDocumentParser, PdfDocumentParser>();
         services.AddScoped<IParserSelector, ParserSelector>();
 
-        services.AddScoped<IDocumentIngestionService, DocumentIngestionService>();
+        services.AddScoped<IDocumentIngestService, DocumentIngestionService>();
 
         return services;
     }

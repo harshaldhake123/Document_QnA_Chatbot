@@ -18,7 +18,7 @@ namespace DocQnA.Application.Features.Documents.UploadDocument
             RuleFor(x => x.Size)
                 .GreaterThan(0).WithMessage("File is empty.");
 
-            RuleFor(x => x.Content)
+            RuleFor(x => x.Stream)
                 .NotNull().WithMessage("File stream is missing.");
         }
     }

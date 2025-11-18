@@ -12,21 +12,25 @@ namespace DocQnA.Api.Controllers
         public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request)
         {
             if (request.File == null)
+            {
                 return BadRequest("File is required.");
-
-            if (request.File.Length > 5 * 1024 * 1024)
-                return BadRequest("Max upload size is 5 MB.");
+            }
 
             var command = new UploadDocumentCommand(
                 request.File.FileName,
-                request.File.ContentType,
+                request.File.ContentType ?? "",
                 request.File.Length,
                 request.File.OpenReadStream()
             );
 
             var result = await handler.Handle(command);
 
-            return Ok(new { documentId = result });
+            if (!result.IsSuccess)
+            {
+                return BadRequest(new { error = result.Error });
+            }
+
+            return Ok(new { documentId = result.Value });
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace DocQnA.Application.Interfaces
 {
-    public interface IDocumentIngestionService
+    public interface IDocumentIngestService
     {
         Task<Guid> IngestAsync(DocumentUpload documentUpload);
     }

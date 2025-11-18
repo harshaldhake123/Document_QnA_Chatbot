@@ -10,7 +10,7 @@ namespace DocQnA.Infrastructure.Ingestion
         IFileStorageService storage,
         IParserSelector parserSelector,
         IEmbeddingService embedding,
-        AppDbContext db) : IDocumentIngestionService
+        AppDbContext db) : IDocumentIngestService
     {
         private const int MinimumInputDocumentTextLength = 200;
         private static readonly TimeSpan EmbeddingTimeout = TimeSpan.FromSeconds(15);
