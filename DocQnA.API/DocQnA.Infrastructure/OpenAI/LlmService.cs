@@ -6,7 +6,8 @@ namespace DocQnA.Infrastructure.OpenAI
 {
     public sealed class LlmService(OpenAIClient client) : ILlmService
     {
-        private const string SystemPrompt = """
+        private const string SystemPrompt =
+            """
             You are an expert assistant that provides concise and accurate answers based on the provided context.
             Use the given context to answer.
             If the context is clearly unrelated or incomplete, say "I do not know."

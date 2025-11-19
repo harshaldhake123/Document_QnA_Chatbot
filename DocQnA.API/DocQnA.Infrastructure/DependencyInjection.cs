@@ -26,8 +26,7 @@ public static class DependencyInjection
         services.AddScoped<IDocumentRepository, DocumentRepository>();
         services.AddScoped<IChunkRepository, ChunkRepository>();
 
-        services.AddSingleton(_ =>
-            new OpenAIClient(config["OpenAI:ApiKey"]));
+        services.AddSingleton(_ => new OpenAIClient(config["OpenAI:ApiKey"]));
 
         services.AddScoped<IEmbeddingService, EmbeddingService>();
         services.AddScoped<ILlmService, LlmService>();
@@ -35,7 +34,7 @@ public static class DependencyInjection
         services.AddScoped<IDocumentParser, PdfDocumentParser>();
         services.AddScoped<IParserSelector, ParserSelector>();
 
-        services.AddScoped<IDocumentIngestService, DocumentIngestionService>();
+        services.AddScoped<IDocumentIngestService, DocumentIngestService>();
 
         return services;
     }

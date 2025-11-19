@@ -4,11 +4,12 @@ namespace DocQnA.Infrastructure.Storage
 {
     public class LocalFileStorageService : IFileStorageService
     {
+        private const string FileStorageFolder = "Uploads";
         private readonly string _root;
 
         public LocalFileStorageService()
         {
-            _root = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+            _root = Path.Combine(Directory.GetCurrentDirectory(), FileStorageFolder);
             if (!Directory.Exists(_root))
             {
                 Directory.CreateDirectory(_root);

@@ -7,7 +7,7 @@ using DocQnA.Infrastructure.Database;
 
 namespace DocQnA.Infrastructure.Ingestion
 {
-    public class DocumentIngestionService(
+    public class DocumentIngestService(
         IFileStorageService storage,
         IParserSelector parserSelector,
         IEmbeddingService embedding,
@@ -41,18 +41,24 @@ namespace DocQnA.Infrastructure.Ingestion
                 var text = await parser.ParseAsync(storedStream, cancellationToken);
 
                 if (string.IsNullOrWhiteSpace(text))
+                {
                     throw new InvalidOperationException("The document contains no readable text.");
+                }
 
                 if (text.Length < MinimumInputDocumentTextLength)
+                {
                     throw new InvalidOperationException(
                         "The extracted text is too short for meaningful processing.");
+                }
 
                 const int maxCharsPerChunk = 1000;
                 const int chunkCharOverlap = 150;
-                var chunks = Chunker.ChunkText(text, maxCharsPerChunk,chunkCharOverlap);
+                var chunks = Chunker.ChunkText(text, maxCharsPerChunk, chunkCharOverlap);
 
                 if (chunks.Count == 0)
+                {
                     throw new InvalidOperationException("Failed to create chunks from the document.");
+                }
 
                 var chunkEntities = await Task.WhenAll(
                     chunks.Select(async (chunk, idx) =>

@@ -21,7 +21,6 @@ namespace DocQnA.Application
             // Validators
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
-
             return services;
         }
     }

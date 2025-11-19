@@ -1,6 +1,5 @@
 ﻿using DocQnA.Application.Interfaces;
 using DocQnA.Application.Models;
-using DocQnA.Application.Services;
 using FluentValidation;
 
 namespace DocQnA.Application.Features.Documents.UploadDocument

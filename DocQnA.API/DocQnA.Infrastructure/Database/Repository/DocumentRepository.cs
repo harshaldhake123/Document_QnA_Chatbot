@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace DocQnA.Infrastructure.Database.Repository
 {
-    public class DocumentRepository(AppDbContext db, ILogger<DocumentRepository>? logger = null) : IDocumentRepository
+    public class DocumentRepository(AppDbContext db, ILogger<DocumentRepository> logger) : IDocumentRepository
     {
         private readonly AppDbContext _db = db ?? throw new ArgumentNullException(nameof(db));
 
@@ -14,7 +14,7 @@ namespace DocQnA.Infrastructure.Database.Repository
         {
             _db.Documents.Add(document);
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            logger?.LogDebug("Created document record {DocumentId}", document.Id);
+            logger.LogDebug("Created document record {DocumentId}", document.Id);
             return document;
         }
 
@@ -25,7 +25,7 @@ namespace DocQnA.Infrastructure.Database.Repository
         {
             _db.Chunks.AddRange(chunks);
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            logger?.LogDebug("Saved {Count} chunks", (chunks as ICollection<Chunk>)?.Count ?? chunks.Count());
+            logger.LogDebug("Saved {Count} chunks", (chunks as ICollection<Chunk>)?.Count ?? chunks.Count());
         }
 
         public Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken = default)
@@ -35,7 +35,7 @@ namespace DocQnA.Infrastructure.Database.Repository
         {
             document.Status = DocumentStatus.Failed;
             await _db.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            logger?.LogInformation("Marked document {DocumentId} as failed", document.Id);
+            logger.LogInformation("Marked document {DocumentId} as failed", document.Id);
         }
     }
 }

@@ -18,8 +18,7 @@ namespace DocQnA.Application.Features.Query.QueryDocument
 
             var answer = await llmService.GenerateAnswerAsync(command.Query, context, cancellationToken);
 
-            return new QueryDocumentResult(answer, [.. chunks.Select(c => new QueryDocumentSource(c.Id, c.ChunkIndex))]
-            );
+            return new QueryDocumentResult(answer, [.. chunks.Select(c => new QueryDocumentSource(c.Id, c.ChunkIndex))]);
         }
     }
 }
