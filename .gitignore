@@ -363,4 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # API Project
-/DocQnA.Api/Uploads/*
+/DocQnA.Api/DocQnA.Api/Uploads/*
