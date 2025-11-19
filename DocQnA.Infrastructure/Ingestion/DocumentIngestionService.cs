@@ -1,5 +1,6 @@
 ﻿using DocQnA.Application.Interfaces;
-using DocQnA.Application.Services;
+using DocQnA.Application.Models;
+using DocQnA.Application.Utils;
 using DocQnA.Domain.Entities;
 using DocQnA.Domain.Enums;
 using DocQnA.Infrastructure.Database;
@@ -15,9 +16,9 @@ namespace DocQnA.Infrastructure.Ingestion
         private const int MinimumInputDocumentTextLength = 200;
         private static readonly TimeSpan EmbeddingTimeout = TimeSpan.FromSeconds(15);
 
-        public async Task<Guid> IngestAsync(DocumentUpload documentUpload)
+        public async Task<Guid> IngestAsync(DocumentUpload documentUpload, CancellationToken cancellationToken)
         {
-            var fileKey = await storage.SaveAsync(documentUpload.Stream, documentUpload.FileName);
+            var fileKey = await storage.SaveAsync(documentUpload.Stream, documentUpload.FileName, cancellationToken);
 
             var document = new Document
             {
@@ -28,16 +29,16 @@ namespace DocQnA.Infrastructure.Ingestion
             };
 
             db.Documents.Add(document);
-            await db.SaveChangesAsync();
+            await db.SaveChangesAsync(cancellationToken);
 
-            await using var transaction = await db.Database.BeginTransactionAsync();
+            await using var transaction = await db.Database.BeginTransactionAsync(cancellationToken);
 
             try
             {
                 var parser = parserSelector.Select(documentUpload.FileName, documentUpload.ContentType);
 
-                await using var storedStream = await storage.OpenReadAsync(fileKey);
-                var text = await parser.ParseAsync(storedStream);
+                await using var storedStream = await storage.OpenReadAsync(fileKey, cancellationToken);
+                var text = await parser.ParseAsync(storedStream, cancellationToken);
 
                 if (string.IsNullOrWhiteSpace(text))
                     throw new InvalidOperationException("The document contains no readable text.");
@@ -46,7 +47,9 @@ namespace DocQnA.Infrastructure.Ingestion
                     throw new InvalidOperationException(
                         "The extracted text is too short for meaningful processing.");
 
-                var chunks = Chunker.ChunkText(text, maxChars: 1600);
+                const int maxCharsPerChunk = 1000;
+                const int chunkCharOverlap = 150;
+                var chunks = Chunker.ChunkText(text, maxCharsPerChunk,chunkCharOverlap);
 
                 if (chunks.Count == 0)
                     throw new InvalidOperationException("Failed to create chunks from the document.");
@@ -71,17 +74,17 @@ namespace DocQnA.Infrastructure.Ingestion
                 db.Chunks.AddRange(chunkEntities);
 
                 document.Status = DocumentStatus.Uploaded;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync(cancellationToken);
 
-                await transaction.CommitAsync();
+                await transaction.CommitAsync(cancellationToken);
                 return document.Id;
             }
             catch
             {
-                await transaction.RollbackAsync();
+                await transaction.RollbackAsync(cancellationToken);
 
                 document.Status = DocumentStatus.Failed;
-                await db.SaveChangesAsync();
+                await db.SaveChangesAsync(cancellationToken);
 
                 throw;
             }

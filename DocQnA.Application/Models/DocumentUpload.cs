@@ -1,4 +1,4 @@
-﻿namespace DocQnA.Application.Services
+﻿namespace DocQnA.Application.Models
 {
     public record DocumentUpload(
     string FileName,

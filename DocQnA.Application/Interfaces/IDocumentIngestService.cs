@@ -1,9 +1,9 @@
-﻿using DocQnA.Application.Services;
+﻿using DocQnA.Application.Models;
 
 namespace DocQnA.Application.Interfaces
 {
     public interface IDocumentIngestService
     {
-        Task<Guid> IngestAsync(DocumentUpload documentUpload);
+        Task<Guid> IngestAsync(DocumentUpload documentUpload, CancellationToken cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DocQnA.Application.Interfaces;
+using DocQnA.Application.Models;
 using DocQnA.Application.Services;
 using FluentValidation;
 
@@ -8,9 +9,9 @@ namespace DocQnA.Application.Features.Documents.UploadDocument
         IValidator<UploadDocumentCommand> validator,
         IDocumentIngestService documentIngestService)
     {
-        public async Task<Result<Guid>> Handle(UploadDocumentCommand command)
+        public async Task<Result<Guid>> HandleAsync(UploadDocumentCommand command, CancellationToken cancellationToken)
         {
-            var validation = await validator.ValidateAsync(command);
+            var validation = await validator.ValidateAsync(command, cancellationToken);
 
             if (!validation.IsValid)
             {
@@ -25,31 +26,8 @@ namespace DocQnA.Application.Features.Documents.UploadDocument
                 command.Stream
             );
 
-            var id = await documentIngestService.IngestAsync(upload);
+            var id = await documentIngestService.IngestAsync(upload, cancellationToken);
             return Result<Guid>.Success(id);
         }
-    }
-
-    public sealed class Result<T>
-    {
-        public bool IsSuccess { get; }
-        public T? Value { get; }
-        public string? Error { get; }
-
-        private Result(T value)
-        {
-            IsSuccess = true;
-            Value = value;
-        }
-
-        private Result(string error)
-        {
-            IsSuccess = false;
-            Error = error;
-        }
-
-        public static Result<T> Success(T value) => new(value);
-
-        public static Result<T> Fail(string error) => new(error);
     }
 }

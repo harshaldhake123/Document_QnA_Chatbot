@@ -4,6 +4,6 @@
     {
         bool CanParse(string fileName, string contentType);
 
-        Task<string> ParseAsync(Stream stream);
+        Task<string> ParseAsync(Stream stream, CancellationToken cancellationToken);
     }
 }

@@ -1,15 +1,16 @@
-﻿using DocQnA.Api.Requests;
+﻿using DocQnA.Api.Contracts;
 using DocQnA.Application.Features.Documents.UploadDocument;
+using DocQnA.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocQnA.Api.Controllers
 {
     [ApiController]
     [Route("api/documents")]
-    public class DocumentController(UploadDocumentHandler handler) : ControllerBase
+    public class DocumentController(IDocumentService documentService) : ControllerBase
     {
         [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request)
+        public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request, CancellationToken cancellationToken)
         {
             if (request.File == null)
             {
@@ -23,7 +24,7 @@ namespace DocQnA.Api.Controllers
                 request.File.OpenReadStream()
             );
 
-            var result = await handler.Handle(command);
+            var result = await documentService.UploadAsync(command, cancellationToken);
 
             if (!result.IsSuccess)
             {

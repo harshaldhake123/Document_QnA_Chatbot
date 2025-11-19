@@ -15,19 +15,19 @@ namespace DocQnA.Infrastructure.Storage
             }
         }
 
-        public async Task<string> SaveAsync(Stream fileStream, string fileName)
+        public async Task<string> SaveAsync(Stream fileStream, string fileName, CancellationToken cancellationToken)
         {
             var sanitized = SanitizeFileName(fileName);
             var key = $"{Guid.NewGuid():N}_{sanitized}";
             var fullPath = Path.Combine(_root, key);
 
             using var fs = File.Create(fullPath);
-            await fileStream.CopyToAsync(fs);
+            await fileStream.CopyToAsync(fs, cancellationToken);
 
             return key;
         }
 
-        public Task<Stream> OpenReadAsync(string key)
+        public Task<Stream> OpenReadAsync(string key, CancellationToken cancellationToken)
         {
             var fullPath = Path.Combine(_root, key);
             return Task.FromResult<Stream>(File.OpenRead(fullPath));

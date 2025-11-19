@@ -1,4 +1,4 @@
-﻿namespace DocQnA.Api.Requests
+﻿namespace DocQnA.Api.Contracts
 {
     public record UploadDocumentRequest(IFormFile? File);
 }

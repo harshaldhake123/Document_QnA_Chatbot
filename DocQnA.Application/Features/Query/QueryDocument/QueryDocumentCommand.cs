@@ -1,7 +1,7 @@
-﻿namespace DocQnA.Application.Features.RAG.QueryDocument
+﻿namespace DocQnA.Application.Features.Query.QueryDocument
 {
     public record QueryDocumentCommand(
-        string Query
+        string? Query
         );
 
     public record QueryDocumentResult(

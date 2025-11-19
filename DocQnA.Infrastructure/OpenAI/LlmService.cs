@@ -4,21 +4,26 @@ using OpenAI.Chat;
 
 namespace DocQnA.Infrastructure.OpenAI
 {
-    public sealed class LlmService : ILlmService
+    public sealed class LlmService(OpenAIClient client) : ILlmService
     {
-        private readonly ChatClient _chatClient;
+        private const string SystemPrompt = """
+            You are an expert assistant that provides concise and accurate answers based on the provided context.
+            Use the given context to answer.
+            If the context is clearly unrelated or incomplete, say "I do not know."
+            Otherwise, answer using the best available context.
+            """;
 
-        public LlmService(OpenAIClient client)
-        {
-            _chatClient = client.GetChatClient("gpt-4o-mini");
-        }
+        private readonly ChatClient _chatClient = client.GetChatClient("gpt-4o-mini");
 
         public async Task<string> GenerateAnswerAsync(string question, string context, CancellationToken cancellationToken = default)
         {
             var response = await _chatClient.CompleteChatAsync(
                 [
-                new SystemChatMessage("Use only the given context. If the context does not contain the answer, say you do not know."),
-                new UserChatMessage($"Context:\n{context}\n\nQuestion:\n{question}")
+                    new SystemChatMessage(SystemPrompt),
+                    new UserChatMessage($@"
+                            Context:  {context}
+                            Question: {question}
+                            Answer: ")
                 ],
                 cancellationToken: cancellationToken
             );

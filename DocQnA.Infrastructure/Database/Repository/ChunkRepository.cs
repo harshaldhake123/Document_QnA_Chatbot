@@ -8,7 +8,7 @@ namespace DocQnA.Infrastructure.Database.Repository
 {
     public class ChunkRepository(AppDbContext db) : IChunkRepository
     {
-        public async Task<List<Chunk>> SearchByEmbeddingAsync(Vector queryVector, int topK)
+        public async Task<List<Chunk>> SearchByEmbeddingAsync(Vector queryVector, int topK, CancellationToken cancellationToken)
         {
             var npgParam = new NpgsqlParameter("query_embedding", queryVector);
 
@@ -29,10 +29,10 @@ namespace DocQnA.Infrastructure.Database.Repository
                 """,
              topK,
              npgParam)
-         .ToListAsync();
+         .ToListAsync(cancellationToken: cancellationToken);
         }
 
-        public async Task<List<Chunk>> FindSimilarAsync(float[] queryEmbedding, int limit, CancellationToken ct = default)
+        public async Task<List<Chunk>> FindSimilarAsync(float[] queryEmbedding, int limit, CancellationToken cancellationToken)
         {
             var param = new NpgsqlParameter("query_embedding", queryEmbedding);
 
@@ -53,12 +53,12 @@ namespace DocQnA.Infrastructure.Database.Repository
                     """,
                     limit,
                 param)
-            .ToListAsync(ct);
+            .ToListAsync(cancellationToken);
         }
 
-        public async Task AddRangeAsync(IEnumerable<Chunk> chunks, CancellationToken ct = default)
+        public async Task AddRangeAsync(IEnumerable<Chunk> chunks, CancellationToken cancellationToken)
         {
-            await db.Chunks.AddRangeAsync(chunks, ct);
+            await db.Chunks.AddRangeAsync(chunks, cancellationToken);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DocQnA.Application.Interfaces;
+using System.Text;
 using UglyToad.PdfPig;
 
 namespace DocQnA.Infrastructure.Parsing
@@ -10,18 +11,26 @@ namespace DocQnA.Infrastructure.Parsing
             return fileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase);
         }
 
-        public Task<string> ParseAsync(Stream stream)
+        public Task<string> ParseAsync(Stream stream, CancellationToken cancellationToken)
         {
             stream.Position = 0;
 
             using var doc = PdfDocument.Open(stream);
-            var texts = doc.GetPages()
-                .Select(page => page.Text)
-                .Where(text => !string.IsNullOrWhiteSpace(text));
+            var sb = new StringBuilder();
 
-            var result = string.Join(Environment.NewLine + Environment.NewLine, texts);
+            foreach (var page in doc.GetPages())
+            {
+                var words = page.GetWords();
 
-            return Task.FromResult(result);
+                if (words != null && words.Any())
+                {
+                    var line = string.Join(" ", words.Select(w => w.Text));
+                    sb.AppendLine(line);
+                    sb.AppendLine();
+                }
+            }
+
+            return Task.FromResult(sb.ToString());
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace DocQnA.Application.Features.RAG.QueryDocument
+namespace DocQnA.Application.Features.Query.QueryDocument
 {
     public class QueryDocumentCommandValidator : AbstractValidator<QueryDocumentCommand>
     {
