@@ -12,13 +12,16 @@ namespace DocQnA.Application.Features.Query.QueryDocument
             var queryVector = await embeddingService.Embed(command.Query);
 
             const int numRelevantChunks = 8;
-            var chunks = await chunkRepository.SearchByEmbeddingAsync(queryVector, numRelevantChunks, cancellationToken);
+
+            var chunks = await chunkRepository.SearchByEmbeddingAsync(queryVector, command.DocumentId, numRelevantChunks, cancellationToken);
 
             var context = string.Join("\n\n", chunks.Select(c => c.Text));
 
             var answer = await llmService.GenerateAnswerAsync(command.Query, context, cancellationToken);
 
-            return new QueryDocumentResult(answer, [.. chunks.Select(c => new QueryDocumentSource(c.Id, c.ChunkIndex))]);
+            return new QueryDocumentResult(
+                answer,
+                chunks.Select(c => new QueryDocumentSource(c.Id, c.ChunkIndex)).ToList());
         }
     }
 }

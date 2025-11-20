@@ -5,7 +5,7 @@ namespace DocQnA.Application.Interfaces
 {
     public interface IChunkRepository
     {
-        Task<List<Chunk>> SearchByEmbeddingAsync(Vector queryVector, int topK, CancellationToken cancellationToken);
+        Task<List<Chunk>> SearchByEmbeddingAsync(Vector queryVector, Guid documentId, int topK, CancellationToken cancellationToken);
 
         Task<List<Chunk>> FindSimilarAsync(float[] queryEmbedding, int limit, CancellationToken cancellationToken);
 

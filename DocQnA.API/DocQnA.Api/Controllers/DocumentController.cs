@@ -9,8 +9,8 @@ namespace DocQnA.Api.Controllers
     [Route("api/documents")]
     public class DocumentController(IDocumentService documentService) : ControllerBase
     {
-        [HttpPost("upload")]
-        public async Task<IActionResult> Upload([FromForm] UploadDocumentRequest request, CancellationToken cancellationToken)
+        [HttpPost]
+        public async Task<IActionResult> UploadDocument([FromForm] UploadDocumentRequest request, CancellationToken cancellationToken)
         {
             if (request.File == null)
             {

@@ -1,4 +1,6 @@
 ﻿namespace DocQnA.Api.Contracts
 {
-    public record QueryDocumentRequest(string? Query);
+    public record QueryDocumentRequest(
+        string? Query
+        );
 }
