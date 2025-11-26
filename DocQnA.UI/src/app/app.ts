@@ -1,13 +1,13 @@
-import { UbButtonDirective } from '@/components/ui/button';
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet, UbButtonDirective],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+    selector: 'app-root',
+    imports: [RouterOutlet, ToastContainerComponent],
+    templateUrl: './app.html',
+    styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('DocQnA.UI');
+    protected readonly title = 'DocQnA.UI';
 }

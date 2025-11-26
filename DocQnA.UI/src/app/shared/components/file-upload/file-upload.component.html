@@ -1,0 +1,10 @@
+<div
+    class="border-2 border-dashed border-neutral-200 rounded-lg p-8 text-center cursor-pointer hover:border-neutral-300 transition">
+    <input type="file" accept="application/pdf" (change)="onFileSelected($event)" class="hidden"
+        title="Select PDF to upload" aria-label="Select PDF to upload" #fileInput />
+    <div (click)="fileInput.click()" (keydown.enter)="fileInput.click()" tabindex="0" role="button">
+        <p class="text-neutral-600 mb-2">Drag PDF here or click to select</p>
+        <p class="text-sm text-neutral-500">Only PDF files up to 5MB are supported</p>
+    </div>
+    <div *ngIf="errorMessage$ | async as errorMsg" class="text-red-500 text-sm mt-2">{{ errorMsg }}</div>
+</div>

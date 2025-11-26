@@ -1,0 +1,35 @@
+<div class="container mx-auto py-8">
+    <div ubCard class="max-w-2xl mx-auto h-[600px] flex flex-col">
+        <div ubCardHeader>
+            <h3 ubCardTitle>Chat with Documents</h3>
+            <p ubCardDescription>Ask questions about your uploaded PDF</p>
+        </div>
+        <div ubCardContent class="flex-1 overflow-y-auto space-y-4 px-2">
+            <ng-container *ngIf="(messages$ | async) as messages">
+
+                @if (messages.length > 0) {
+                <div *ngFor="let msg of messages; trackBy: trackByIndex" class="flex"
+                    [ngClass]="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
+                    <div class="rounded-lg px-4 py-2 max-w-[75%] text-sm"
+                        [ngClass]="msg.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'">
+                        {{ msg.text }}
+                    </div>
+                </div>
+                }
+                @else{
+                <p class="text-neutral-500 text-sm text-center">No messages yet. Start by asking a question.</p>
+                }
+            </ng-container>
+        </div>
+        <div class="border-t p-4">
+            <form class="flex gap-2" (ngSubmit)="sendMessage()" autocomplete="off">
+                <textarea ubTextarea [formControl]="input" placeholder="Ask a question about the document..."
+                    class="flex-1 resize-none" rows="1" [disabled]="(loading$ | async) === true"></textarea>
+                <button ubButton type="submit" [disabled]="(loading$ | async) || (isInputEmpty$ | async)" size="icon">
+                    <span *ngIf="(loading$ | async) === false">Send</span>
+                    <span *ngIf="(loading$ | async) === true" class="animate-spin">...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
