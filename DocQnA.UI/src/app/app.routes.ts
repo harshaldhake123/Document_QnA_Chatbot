@@ -4,7 +4,9 @@ export const routes: Routes = [
   {
     path: 'upload',
     loadComponent: () =>
-      import('./features/upload/upload-page.component').then(m => m.UploadPageComponent),
+      import('./features/upload/file-upload-dialog.component').then(
+        m => m.FileUploadDialogComponent
+      ),
   },
   {
     path: 'chat',

@@ -1,57 +1,14 @@
-<div class="container mx-auto py-8">
-  <div ubCard class="max-w-2xl mx-auto h-[600px] flex flex-col">
-    <div ubCardHeader>
-      <h3 ubCardTitle>Chat with Documents</h3>
-      <p ubCardDescription>Ask questions about your uploaded PDF</p>
-    </div>
-    <div ubCardContent class="flex-1 overflow-y-auto space-y-4 px-2">
-      @if (messages$ | async; as messages) {
-        @if (messages.length > 0) {
-          @for (msg of messages; track trackByIndex($index, msg)) {
-            <div class="flex" [ngClass]="msg.sender === 'user' ? 'justify-end' : 'justify-start'">
-              <div
-                class="rounded-lg px-4 py-2 max-w-[75%] text-sm"
-                [ngClass]="
-                  msg.sender === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-muted-foreground'
-                "
-              >
-                {{ msg.text }}
-              </div>
-            </div>
-          }
-        } @else {
-          <p class="text-neutral-500 text-sm text-center">
-            No messages yet. Start by asking a question.
-          </p>
-        }
-      }
-    </div>
-    <div class="border-t p-4">
-      <form class="flex gap-2" (ngSubmit)="sendMessage()" autocomplete="off">
-        <textarea
-          ubTextarea
-          [formControl]="input"
-          placeholder="Ask a question about the document..."
-          class="flex-1 resize-none"
-          rows="1"
-          [disabled]="(loading$ | async) === true"
-        ></textarea>
-        <button
-          ubButton
-          type="submit"
-          [disabled]="(loading$ | async) || (isInputEmpty$ | async)"
-          size="icon"
-        >
-          @if ((loading$ | async) === false) {
-            <span>Send</span>
-          }
-          @if ((loading$ | async) === true) {
-            <span class="animate-spin">...</span>
-          }
-        </button>
-      </form>
-    </div>
+<div class="container mx-auto py-12">
+  <div class="max-w-md mx-auto text-center space-y-6">
+    <h2 class="text-2xl font-semibold">Upload Document</h2>
+    <p class="text-neutral-600">Upload a PDF to start asking questions.</p>
+
+    <button ubButton variant="default" (click)="openUploadDialog()">Upload PDF</button>
+
+    @if (documentId) {
+      <div class="mt-4 p-3 bg-muted text-sm rounded-md">
+        Selected document: <strong>{{ documentId }}</strong>
+      </div>
+    }
   </div>
 </div>

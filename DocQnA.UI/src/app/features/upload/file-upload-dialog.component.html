@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Upload PDF Document</h2>
+
+<mat-dialog-content class="space-y-4">
+  <p class="text-sm text-gray-500">Only PDF files up to 5MB</p>
+
+  <app-file-upload (fileSelected)="onFileSelected($event)" />
+
+  @if (error) {
+    <div class="text-red-500 text-sm">{{ error }}</div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+
+  <button mat-flat-button color="primary" [disabled]="!file || uploading" (click)="upload()">
+    @if (!uploading) {
+      Submit
+    }
+    @if (uploading) {
+      <span class="animate-spin">Uploading…</span>
+    }
+  </button>
+</mat-dialog-actions>
