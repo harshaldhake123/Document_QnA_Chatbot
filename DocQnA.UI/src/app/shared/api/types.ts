@@ -1,17 +1,17 @@
 export interface ApiResponse<T> {
-    readonly data: T;
-    readonly message?: string;
+  readonly data: T;
+  readonly message?: string;
 }
 
 export interface ChatQueryRequest {
-    readonly question: string;
+  readonly question: string;
 }
 
 export interface ChatQueryResponse {
-    readonly reply: string;
+  readonly reply: string;
 }
 
 export interface FileUploadResponse {
-    readonly documentId: string;
-    readonly fileName: string;
+  readonly documentId: string;
+  readonly fileName: string;
 }

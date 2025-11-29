@@ -1,18 +1,30 @@
 <div class="container mx-auto py-8">
-    <div ubCard class="max-w-2xl mx-auto">
-        <div ubCardHeader>
-            <h3 ubCardTitle>Upload PDF Document</h3>
-            <p ubCardDescription>Only PDF files up to 5MB are supported</p>
-        </div>
-        <div ubCardContent class="space-y-4">
-            <app-file-upload (fileSelected)="onFileSelected($event)"></app-file-upload>
-            <button ubButton variant="default"
-                [disabled]="(selectedFile$ | async) === null || (uploading$ | async) === true" (click)="upload()">
-                <span *ngIf="(uploading$ | async) === false">Upload</span>
-                <span *ngIf="(uploading$ | async) === true" class="animate-spin">Uploading...</span>
-            </button>
-            <div *ngIf="(uploadSuccess$ | async) === true" class="text-green-600 text-sm">Upload successful!</div>
-            <div *ngIf="(uploadError$ | async) as error" class="text-red-500 text-sm">{{ error }}</div>
-        </div>
+  <div ubCard class="max-w-2xl mx-auto">
+    <div ubCardHeader>
+      <h3 ubCardTitle>Upload PDF Document</h3>
+      <p ubCardDescription>Only PDF files up to 5MB are supported</p>
     </div>
+    <div ubCardContent class="space-y-4">
+      <app-file-upload (fileSelected)="onFileSelected($event)" />
+      <button
+        ubButton
+        variant="default"
+        [disabled]="(selectedFile$ | async) === null || (uploading$ | async) === true"
+        (click)="upload()"
+      >
+        @if ((uploading$ | async) === false) {
+          <span>Upload</span>
+        }
+        @if ((uploading$ | async) === true) {
+          <span class="animate-spin">Uploading...</span>
+        }
+      </button>
+      @if ((uploadSuccess$ | async) === true) {
+        <div class="text-green-600 text-sm">Upload successful!</div>
+      }
+      @if (uploadError$ | async; as error) {
+        <div class="text-red-500 text-sm">{{ error }}</div>
+      }
+    </div>
+  </div>
 </div>

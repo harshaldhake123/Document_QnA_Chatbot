@@ -6,13 +6,13 @@ import type { ChatQueryResponse } from '@/app/shared/api/types';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-    private readonly http = inject(HttpClient);
-    private readonly apiBaseUrl = environment.apiBaseUrl;
+  private readonly http = inject(HttpClient);
+  private readonly apiBaseUrl = environment.apiBaseUrl;
 
-    public queryDocument(documentId: string, question: string): Observable<ChatQueryResponse> {
-        return this.http.post<ChatQueryResponse>(
-            `${this.apiBaseUrl}/api/document/${documentId}/query`,
-            { question }
-        );
-    }
+  public queryDocument(documentId: string, question: string): Observable<ChatQueryResponse> {
+    return this.http.post<ChatQueryResponse>(
+      `${this.apiBaseUrl}/api/document/${documentId}/query`,
+      { question }
+    );
+  }
 }
